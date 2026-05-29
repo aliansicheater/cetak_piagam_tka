@@ -4,46 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistem Cetak Piagam TKA 2026</title>
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts for Premium look -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;800&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
-    <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- QRCodeJS Library for High Resolution QR Code Generation -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     
     <style id="print-layout-style">
-        /* Aturan dinamis akan disuntikkan oleh JavaScript */
         @page { size: 297mm 210mm landscape; margin: 0; }
     </style>
     
     <style>
-        /* ---------------------------------------------------
-           SCROLLBAR KUSTOM ELEGAN
-           --------------------------------------------------- */
         ::-webkit-scrollbar { width: 8px; height: 8px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
-
-        /* ---------------------------------------------------
-           SMART PREVIEW SCALE UNTUK LAYAR MONITOR
-           --------------------------------------------------- */
         .preview-scale {
             transition: all 0.3s ease;
-            zoom: 0.85; /* Default untuk monitor besar */
+            zoom: 0.85;
         }
         @media (max-width: 1536px) { .preview-scale { zoom: 0.75; } }
         @media (max-width: 1280px) { .preview-scale { zoom: 0.65; } }
         @media (max-width: 1024px) { .preview-scale { zoom: 0.50; } }
         @media (max-width: 768px)  { .preview-scale { zoom: 0.35; } }
-
-        /* ---------------------------------------------------
-           DESAIN KHUSUS CETAK (PRESISI TINGGI 100% KERTAS)
-           --------------------------------------------------- */
         @media print {
             html, body {
                 width: 100% !important;
@@ -56,8 +40,6 @@
             }
             .no-print { display: none !important; }
             #print-container { display: block !important; width: 100%; }
-            
-            /* Memaksa elemen piagam melebar sempurna seluas ukuran kertas (A4/F4) */
             .print-page {
                 width: 100vw !important;
                 height: 100vh !important;
@@ -69,16 +51,8 @@
                 transform: none !important;
             }
         }
-
-        /* ---------------------------------------------------
-           DIMENSI KERTAS PREVIEW (DIKUNCI)
-           --------------------------------------------------- */
         .paper-a4 { width: 297mm; height: 210mm; }
         .paper-f4 { width: 330mm; height: 215mm; }
-
-        /* ---------------------------------------------------
-           DESAIN ESTETIKA PIAGAM (DIKUNCI)
-           --------------------------------------------------- */
         .font-serif-elegant { font-family: 'Playfair Display', Georgia, serif; }
         .font-header { font-family: 'Cinzel', serif; }
         .font-sans-clean { font-family: 'Inter', sans-serif; }
@@ -94,16 +68,11 @@
     </style>
 </head>
 <body class="bg-slate-50 font-sans-clean text-slate-800 h-screen flex flex-col overflow-hidden no-print">
-
-    <!-- PORTAL LOGIN (No Print) -->
     <div id="login-portal" class="fixed inset-0 z-[100] bg-indigo-950 flex flex-col items-center justify-center p-4">
-        <!-- Abstract Background App -->
         <div class="absolute inset-0 opacity-20 bg-cover bg-center" style="background-image: radial-gradient(circle at 50% -20%, #4338ca 0%, #020617 80%);"></div>
         
         <div class="w-full max-w-md bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden relative z-10 transform transition-all duration-500 scale-100 opacity-100" id="login-box">
-            <!-- Header Login -->
             <div class="bg-gradient-to-r from-indigo-950 to-indigo-900 text-center py-6 px-4 border-b border-yellow-600/30">
-                <!-- Logo Tut Wuri Handayani -->
                 <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-3 p-1.5 shadow-md overflow-hidden">
                     <img src="https://lh3.googleusercontent.com/d/1RFPU89FkLYOPV1ql-ys96d2WBqy2buZI" 
                          alt="Logo Tut Wuri Handayani" 
@@ -113,8 +82,6 @@
                 <h2 class="font-header text-lg font-bold tracking-wider text-white drop-shadow-md">Sistem Cetak Piagam TKA</h2>
                 <p class="text-xs text-slate-300 font-medium">SD Negeri 001 Gunung Sari • Berau</p>
             </div>
-
-            <!-- Tab Pemilih Login -->
             <div class="flex border-b text-sm font-medium bg-slate-50">
                 <button onclick="switchLoginTab('siswa')" id="tab-login-siswa" class="flex-1 py-3.5 text-center border-b-2 border-indigo-600 text-indigo-600 font-bold focus:outline-none transition-colors">
                     <i class="fa-solid fa-graduation-cap mr-1.5"></i>Siswa (Mandiri)
@@ -123,10 +90,7 @@
                     <i class="fa-solid fa-user-shield mr-1.5"></i>Portal Admin
                 </button>
             </div>
-
-            <!-- Formulir Login -->
             <div class="p-6">
-                <!-- Portal Siswa -->
                 <div id="form-siswa" class="space-y-5 animate-fade-in">
                     <p class="text-[11px] text-slate-500 text-center leading-relaxed">Silakan masukkan 10 digit <b>NISN</b> Anda untuk mencari, memverifikasi, dan mencetak piagam penghargaan secara mandiri.</p>
                     <div>
@@ -140,8 +104,6 @@
                         Masuk & Verifikasi <i class="fa-solid fa-arrow-right"></i>
                     </button>
                 </div>
-
-                <!-- Portal Admin -->
                 <div id="form-admin" class="space-y-5 hidden animate-fade-in">
                     <p class="text-[11px] text-slate-500 text-center leading-relaxed">Masuk menggunakan kredensial administrator Tata Usaha untuk mengelola dan mencetak semua data piagam.</p>
                     <div class="space-y-3">
@@ -164,14 +126,10 @@
                         Masuk Sistem <i class="fa-solid fa-shield-halved"></i>
                     </button>
                 </div>
-
-                <!-- Pesan Error -->
                 <div id="login-error-msg" class="mt-4 p-3 bg-rose-50 border border-rose-200 text-rose-700 text-[11px] rounded-xl text-center font-semibold hidden flex items-center justify-center gap-2">
                     <i class="fa-solid fa-triangle-exclamation"></i> <span>Format NISN salah atau data tidak ditemukan!</span>
                 </div>
             </div>
-
-            <!-- Footer Login Kredit Pengembang -->
             <div class="bg-slate-50 border-t border-slate-200 py-3.5 px-4 text-center">
                 <p class="text-[9px] text-slate-400 font-semibold uppercase tracking-wider mb-0.5">Dikembangkan Secara Eksklusif Oleh</p>
                 <p class="text-[13px] font-bold text-indigo-950">Luis Ismail</p>
@@ -179,9 +137,6 @@
             </div>
         </div>
     </div>
-
-
-    <!-- APP HEADER PANEL (No Print) -->
     <header class="bg-indigo-950 text-white shadow-md z-40 no-print shrink-0 relative border-b border-indigo-900">
         <div class="w-full px-4 py-3 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div class="flex items-center gap-3">
@@ -201,14 +156,11 @@
             </div>
             
             <div class="flex flex-wrap items-center gap-2.5">
-                <!-- Ukuran Kertas -->
                 <div class="flex items-center bg-indigo-900/50 rounded-lg p-1 border border-indigo-800 shadow-inner">
                     <span class="px-2 text-[10px] text-indigo-300 font-bold uppercase tracking-wider">Kertas:</span>
                     <button id="btn-a4" onclick="setPaperSize('a4')" class="px-3 py-1 rounded text-xs bg-yellow-500 text-indigo-950 font-bold transition shadow-sm">A4</button>
                     <button id="btn-f4" onclick="setPaperSize('f4')" class="px-3 py-1 rounded text-xs text-indigo-100 hover:text-white hover:bg-indigo-700 transition font-medium">F4/Folio</button>
                 </div>
-
-                <!-- Opsi Halaman -->
                 <div class="flex items-center bg-indigo-900/50 rounded-lg p-1 border border-indigo-800 shadow-inner">
                     <span class="px-2 text-[10px] text-indigo-300 font-bold uppercase tracking-wider">Mode:</span>
                     <select id="select-page-mode" onchange="renderCertificates()" class="bg-transparent text-white font-medium rounded px-2 py-1 border-0 focus:ring-0 text-xs cursor-pointer outline-none">
@@ -217,13 +169,9 @@
                         <option value="back" class="text-slate-800">Hanya Nilai (Belakang)</option>
                     </select>
                 </div>
-
-                <!-- Tombol Cetak -->
                 <button onclick="window.print()" class="bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white font-bold px-4 py-1.5 rounded-lg flex items-center gap-2 shadow-lg shadow-emerald-900/20 transition-all text-xs border border-emerald-400/50">
                     <i class="fa-solid fa-print"></i> Cetak / PDF
                 </button>
-
-                <!-- Tombol Keluar -->
                 <div class="w-[1px] h-6 bg-indigo-800 mx-1"></div>
                 <button onclick="doLogout()" class="text-rose-400 hover:text-rose-300 font-bold px-2 py-1.5 rounded-lg flex items-center gap-1.5 transition-all text-[11px] uppercase tracking-wider hover:bg-indigo-900/50">
                     <i class="fa-solid fa-power-off"></i> Keluar
@@ -231,14 +179,9 @@
             </div>
         </div>
     </header>
-
-    <!-- MAIN APP LAYOUT (FULL SCREEN RESPONSIVE) -->
     <div class="flex-1 flex overflow-hidden no-print relative">
-        
-        <!-- SIDEBAR KONTROL (Hanya Terlihat Oleh Admin) -->
         <aside id="admin-sidebar" class="w-80 flex-col bg-white border-r border-slate-200 z-10 shadow-[4px_0_24px_rgba(0,0,0,0.02)] shrink-0 overflow-y-auto hidden">
             <div class="p-5 flex flex-col gap-6">
-                <!-- Parameter Piagam -->
                 <div>
                     <h3 class="font-bold text-slate-800 border-b-2 border-slate-100 pb-2 mb-4 flex items-center gap-2 text-xs uppercase tracking-widest">
                         <i class="fa-solid fa-sliders text-indigo-500"></i> Konfigurasi
@@ -262,8 +205,6 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- Seleksi Peserta -->
                 <div class="flex-grow flex flex-col">
                     <h3 class="font-bold text-slate-800 border-b-2 border-slate-100 pb-2 mb-3 flex items-center justify-between text-xs uppercase tracking-widest">
                         <span class="flex items-center gap-2"><i class="fa-solid fa-users text-indigo-500"></i> Peserta</span>
@@ -274,27 +215,18 @@
                         <button onclick="toggleSelectAll(true)" class="flex-1 py-1.5 text-[10px] bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold rounded-lg transition-colors border border-indigo-100">Pilih Semua</button>
                         <button onclick="toggleSelectAll(false)" class="flex-1 py-1.5 text-[10px] bg-slate-50 hover:bg-slate-100 text-slate-600 font-bold rounded-lg transition-colors border border-slate-200">Batal Semua</button>
                     </div>
-
-                    <!-- Input Cari -->
                     <div class="relative mb-3">
                         <i class="fa-solid fa-magnifying-glass absolute left-3 top-2 text-slate-400 text-xs"></i>
                         <input type="text" id="search-peserta" oninput="filterPesertaList()" placeholder="Cari nama siswa..." class="w-full pl-8 pr-3 py-1.5 border border-slate-200 rounded-lg text-xs focus:ring-2 focus:ring-indigo-500 outline-none transition-shadow bg-slate-50 hover:bg-white">
                     </div>
-
-                    <!-- Scroll List Peserta -->
                     <div class="overflow-y-auto flex-1 border border-slate-200 rounded-xl p-1.5 bg-slate-50/50 space-y-1" id="peserta-checkbox-list" style="min-height: 250px;">
-                        <!-- Diisi lewat JS -->
                     </div>
                 </div>
             </div>
         </aside>
-
-        <!-- KANVAS PREVIEW UTAMA -->
         <main class="flex-1 overflow-y-auto bg-slate-200/60 relative flex flex-col">
             
             <div class="w-full max-w-5xl mx-auto p-4 sm:p-6 lg:p-8 flex flex-col flex-1">
-                
-                <!-- Alert Info Petunjuk Cetak -->
                 <div id="student-alert" class="w-full mb-6 bg-emerald-50 border border-emerald-200 border-l-4 border-l-emerald-500 text-emerald-800 p-4 rounded-xl text-sm flex gap-3 shadow-sm hidden relative overflow-hidden">
                     <div class="absolute -right-4 -top-4 opacity-10 text-6xl text-emerald-600"><i class="fa-solid fa-graduation-cap"></i></div>
                     <i class="fa-solid fa-graduation-cap text-xl mt-0.5 text-emerald-600 shrink-0 relative z-10"></i>
@@ -315,32 +247,18 @@
                         <b class="text-yellow-900">Centang Background graphics</b>.
                     </div>
                 </div>
-
-                <!-- CONTAINER DOKUMEN PREVIEW DENGAN EFEK ZOOM -->
                 <div id="preview-container" class="flex flex-col gap-10 items-center w-full pb-16">
-                    <!-- Lembaran Piagam di-render di sini -->
                 </div>
                 
             </div>
-            
-            <!-- Credit Footer in Workspace -->
             <div class="mt-auto text-center py-4 text-[10px] text-slate-400 font-medium">
                 Dikembangkan oleh <b class="text-slate-500">Luis Ismail</b> • Hak Cipta © 2026 SD Negeri 001 Gunung Sari
             </div>
         </main>
     </div>
-
-    <!-- -----------------------------------------------------------
-         CETAK CANVAS (Hanya akan muncul di kertas saat diprint) 
-         ----------------------------------------------------------- -->
     <div id="print-container" class="hidden print:block flex flex-col">
-        <!-- Render Asli Hasil Cetak Disuntikkan JS -->
     </div>
-
-
-    <!-- ================= LOGIKA APLIKASI ================= -->
     <script>
-        // Database Peserta TKA Berau 2026
         const dbPeserta = [
             { no: 1, nopes: "T1-26-16-09-0112-0001-8", nisn: "3136052526", nama: "SHAFIRATUL MUKARRAMA", ttl: "PAREPARE, 5 November 2013", mat: 33.33, matKet: "Memadai", ind: 43.33, indKet: "Kurang" },
             { no: 2, nopes: "T1-26-16-09-0112-0002-7", nisn: "0142820564", nama: "Naura Fauzaara Putri", ttl: "Bulukumba, 10 April 2014", mat: 43.33, matKet: "Memadai", ind: 50.00, indKet: "Memadai" },
@@ -440,8 +358,6 @@
             { no: 96, nopes: "T1-26-16-09-0112-0096-9", nisn: "3127075627", nama: "NURAISYAH FATIMA", ttl: "LAHAD DATU, 5 Mei 2012", mat: 36.67, matKet: "Memadai", ind: 46.67, indKet: "Kurang" },
             { no: 97, nopes: "T1-26-16-09-0112-0097-8", nisn: "3132634957", nama: "Andi Muhammad Nur", ttl: "Bulukumba, 21 September 2013", mat: 30.00, matKet: "Kurang", ind: 26.67, indKet: "Kurang" }
         ];
-
-        // State Aplikasi
         let currentRole = 'guest'; // 'guest', 'admin', 'student'
         let currentPaperSize = 'a4'; // a4 atau f4
         let selectedPesertaIds = [1, 2, 3]; // Default admin
@@ -677,18 +593,12 @@
                 if (!peserta) return;
 
                 const frontContentHtml = `
-                    <!-- Hiasan Sudut Ornamen Tradisional Berwarna Emas / Gelap (Sederhana & Bersih) -->
                     <div class="absolute top-4 left-4 w-12 h-12 border-t-2 border-l-2 border-[#C5A059]"></div>
                     <div class="absolute top-4 right-4 w-12 h-12 border-t-2 border-r-2 border-[#C5A059]"></div>
                     <div class="absolute bottom-4 left-4 w-12 h-12 border-b-2 border-l-2 border-[#C5A059]"></div>
                     <div class="absolute bottom-4 right-4 w-12 h-12 border-b-2 border-r-2 border-[#C5A059]"></div>
-
-                    <!-- Pembungkus Bingkai Emas -->
                     <div class="gold-border flex-grow w-full h-full p-6 md:p-8 flex flex-col justify-between relative bg-white bg-opacity-90">
-                        
-                        <!-- KOP LEMBAGA (Menggunakan Logo Tut Wuri Handayani Resmi Baru) -->
                         <div class="flex items-center justify-center gap-6 border-b-2 border-double border-[#C5A059] pb-3 mx-6">
-                            <!-- Logo Tut Wuri Handayani asli via New Drive Link dengan blend-mode untuk menghilangkan latar putih -->
                             <div class="w-16 h-16 shrink-0 flex items-center justify-center">
                                 <img src="https://lh3.googleusercontent.com/d/1RFPU89FkLYOPV1ql-ys96d2WBqy2buZI" 
                                      alt="Logo Tut Wuri Handayani" 
@@ -701,8 +611,6 @@
                                 <p class="text-[10px] md:text-xs text-slate-500 font-medium">SD Negeri 001 Gunung Sari • NPSN: 30404492</p>
                             </div>
                         </div>
-
-                        <!-- BADAN PIAGAM -->
                         <div class="text-center my-auto flex flex-col justify-center gap-3">
                             <h1 class="font-header text-xl md:text-2xl font-extrabold tracking-[0.2em] gold-gradient-text">PIAGAM PENGHARGAAN</h1>
                             <div class="text-slate-400 text-xs tracking-wider -mt-2">Nomor Sertifikat: <span class="font-mono">${peserta.nopes}</span></div>
@@ -720,11 +628,8 @@
                                 yang diselenggarakan di Kabupaten Berau, Provinsi Kalimantan Timur.
                             </p>
                         </div>
-
-                        <!-- TANDA TANGAN & PENGESAHAN -->
                         <div class="flex justify-between items-end px-10 mt-auto">
                             <div class="text-left flex flex-col items-center">
-                                <!-- QR CODE yang Terhubung ke Link Google Drive Anda -->
                                 <div class="border border-slate-300 p-1.5 bg-white rounded-xl flex items-center justify-center w-18 h-18 shadow-sm">
                                     <div class="qrcode-canvas" data-url="https://drive.google.com/file/d/1rDQ4jLC04OzF-H2Qw8tQJ05E1vm3SOgO/view?usp=sharing"></div>
                                 </div>
@@ -734,31 +639,22 @@
                             <div class="text-center w-60">
                                 <p class="text-xs text-slate-600">${liveSettings.kota}, ${liveSettings.tanggal}</p>
                                 <p class="text-xs font-semibold text-slate-700 uppercase tracking-wider mt-0.5">Kepala Satuan Pendidikan,</p>
-                                
-                                <!-- Area Tanda Tangan Basah (Kosong agar bersih) -->
                                 <div class="h-14 flex items-center justify-center relative my-1">
                                     <div class="w-40 border-b border-slate-400 border-dashed opacity-60"></div>
                                 </div>
-
                                 <p class="text-xs font-bold text-indigo-950 underline">${liveSettings.kepsek}</p>
                                 <p class="text-[10px] text-slate-500 font-mono">NIP. ${liveSettings.nip}</p>
                             </div>
                         </div>
                     </div>
                 `;
-
                 const backContentHtml = `
-                    <!-- Hiasan Tipis Modern minimalis -->
-                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-indigo-900 via-amber-500 to-indigo-950"></div>
-                    
+                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-indigo-900 via-amber-500 to-indigo-950"></div>        
                     <div class="flex-grow flex flex-col justify-between">
-                        <!-- HEADER HALAMAN BELAKANG -->
                         <div class="text-center border-b pb-4 mb-4">
                             <h2 class="font-header text-sm md:text-base font-bold text-slate-700 tracking-wider">DAFTAR NILAI CAPAIAN HASIL TES KEMAMPUAN AKADEMIK</h2>
                             <h3 class="font-sans-clean text-xs text-slate-500 mt-1">SD NEGERI 001 GUNUNG SARI • KABUPATEN BERAU • TAHUN 2026</h3>
                         </div>
-
-                        <!-- DATA IDENTITAS PESERTA -->
                         <div class="grid grid-cols-2 gap-x-8 gap-y-2 bg-slate-50 p-4 rounded-lg text-xs border border-slate-200 mb-6 max-w-4xl mx-auto w-full">
                             <div class="flex">
                                 <span class="w-36 font-semibold text-slate-500">NAMA LENGKAP</span>
@@ -781,8 +677,6 @@
                                 <span class="font-medium">${peserta.ttl}</span>
                             </div>
                         </div>
-
-                        <!-- TABEL NILAI UTAMA -->
                         <div class="w-full max-w-4xl mx-auto my-auto">
                             <table class="w-full border-collapse border border-slate-300 text-sm">
                                 <thead>
@@ -825,8 +719,6 @@
                                     </tr>
                                 </tbody>
                             </table>
-
-                            <!-- Penjelasan Kriteria Kategori -->
                             <div class="mt-6 p-4 bg-slate-50 border border-slate-200 rounded-lg text-[11px] text-slate-500">
                                 <p class="font-bold text-slate-600 mb-1 flex items-center gap-1">
                                     <i class="fa-solid fa-graduation-cap"></i> Keterangan Interval Kategori Kelulusan Akademik:
@@ -838,8 +730,6 @@
                                 </ul>
                             </div>
                         </div>
-
-                        <!-- TANDA TANGAN NILAI -->
                         <div class="flex justify-between items-end px-10 mt-auto pt-6 border-t border-dashed border-slate-200">
                             <div class="text-[10px] text-slate-400">
                                 * Lembar ini tidak terpisahkan dari Piagam Utama.<br>
@@ -848,80 +738,55 @@
                             <div class="text-center w-60">
                                 <p class="text-xs text-slate-600">${liveSettings.kota}, ${liveSettings.tanggal}</p>
                                 <p class="text-xs font-semibold text-slate-700 uppercase tracking-wider mt-0.5">Kepala Satuan Pendidikan,</p>
-                                
-                                <!-- Area Tanda Tangan Basah (Kosong agar bersih) -->
                                 <div class="h-10 flex items-center justify-center relative my-1">
                                     <div class="w-36 border-b border-slate-400 border-dashed opacity-60"></div>
                                 </div>
-
                                 <p class="text-xs font-bold text-indigo-950 underline">${liveSettings.kepsek}</p>
                                 <p class="text-[9px] text-slate-500 font-mono">NIP. ${liveSettings.nip}</p>
                             </div>
                         </div>
                     </div>
                 `;
-
-                // Wrapper untuk UI PREVIEW ON-SCREEN dengan teknik Stack Vertikal Flex & Zoom
                 const previewWrapper = document.createElement('div');
                 previewWrapper.className = 'w-full flex flex-col items-center border-b-2 border-slate-300 border-dashed pb-12 mb-4 last:border-0';
-                
-                // Elemen Header Mini untuk UI Preview
                 let previewHeader = `<div class="mb-6 bg-indigo-900 text-white px-5 py-2 rounded-full shadow-lg text-xs font-bold uppercase tracking-widest flex items-center gap-2"><i class="fa-solid fa-user-graduate"></i> Dokumen: ${peserta.nama}</div>`;
-                
                 let previewBody = `<div class="flex flex-col gap-12 items-center preview-scale">`;
-
                 if (pageMode === 'both' || pageMode === 'front') {
                     previewBody += `
                         <div class="relative group">
-                            <!-- Efek Glow Belakang Kertas -->
                             <div class="absolute -inset-2 bg-gradient-to-r from-amber-200 to-indigo-300 rounded-xl blur opacity-30 group-hover:opacity-60 transition duration-500"></div>
-                            <!-- Kertas Asli -->
                             <div class="${sizeClass} bg-white shadow-2xl relative flex flex-col justify-between p-[2.5%] text-slate-800 box-border" style="background-image: radial-gradient(circle, #fcfcf9 0%, #f6f5ee 100%);">
                                 ${frontContentHtml}
                             </div>
                         </div>
                     `;
                 }
-
                 if (pageMode === 'both' || pageMode === 'back') {
                     previewBody += `
                         <div class="relative group">
-                            <!-- Efek Glow Belakang Kertas -->
                             <div class="absolute -inset-2 bg-gradient-to-r from-amber-200 to-indigo-300 rounded-xl blur opacity-30 group-hover:opacity-60 transition duration-500"></div>
-                            <!-- Kertas Asli -->
                             <div class="${sizeClass} bg-white shadow-2xl relative flex flex-col justify-between p-[3%] text-slate-800 box-border">
                                 ${backContentHtml}
                             </div>
                         </div>
                     `;
                 }
-
                 previewBody += `</div>`;
                 previewWrapper.innerHTML = previewHeader + previewBody;
                 previewContainer.appendChild(previewWrapper);
-
-
-                // =======================================================
-                // PEMBUNGKUS MURNI UNTUK DIKIRIM KE PRINTER TANPA EFEK UI
-                // =======================================================
                 const printWrapper = document.createElement('div');
                 let printContent = '';
-
                 if (pageMode === 'both' || pageMode === 'front') {
                     printContent += `<div class="print-page ${sizeClass} relative flex flex-col justify-between p-[2.5%] text-slate-800 box-border" style="background-image: radial-gradient(circle, #fcfcf9 0%, #f6f5ee 100%);">${frontContentHtml}</div>`;
                 }
-                
                 if (pageMode === 'both' || pageMode === 'back') {
                     printContent += `<div class="print-page ${sizeClass} relative flex flex-col justify-between p-[3%] text-slate-800 box-border bg-white">${backContentHtml}</div>`;
                 }
-
                 printWrapper.innerHTML = printContent;
                 printContainer.appendChild(printWrapper);
             });
-
-            // Generate Kode QR menggunakan QRCodeJS ke semua canvas yang disiapkan
             document.querySelectorAll('.qrcode-canvas').forEach(el => {
-                el.innerHTML = ''; // Bersihkan instansi lama sebelum render ulang
+                el.innerHTML = '';
                 const url = el.getAttribute('data-url');
                 new QRCode(el, {
                     text: url,
@@ -933,8 +798,6 @@
                 });
             });
         }
-
-        // Penyesuaian kelas warna badge berdasarkan kategori nilai
         function getCategoryBadgeClass(category) {
             switch(category) {
                 case 'Baik':
